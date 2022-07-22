@@ -15,7 +15,9 @@ mod tests {
     }
 }
 
-static UWUID_HEX_DIGITS: [char; 16] = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 'z', 'x', 'c', 'm', ',', '.'];
+static UWUID_HEX_DIGITS: [char; 16] = [
+    'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '🥰', '😳', '🥺', '🤗', '😍', ',',
+];
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct UwuId(u128);
@@ -38,7 +40,7 @@ impl Display for UwuId {
             let mask = 0xF << (i * 4);
             let digit = (self.0 & mask) >> (i * 4);
             write!(f, "{}", UWUID_HEX_DIGITS[digit as usize])?;
-        };
+        }
         Ok(())
     }
 }
@@ -49,8 +51,11 @@ impl FromStr for UwuId {
         let mut id = 0_u128;
         for digit in s.chars().rev() {
             id <<= 4;
-            id += UWUID_HEX_DIGITS.iter().position(|e| *e == digit).ok_or(std::fmt::Error)? as u128;
-        };
+            id += UWUID_HEX_DIGITS
+                .iter()
+                .position(|e| *e == digit)
+                .ok_or(std::fmt::Error)? as u128;
+        }
         Ok(Self(id))
     }
 }
